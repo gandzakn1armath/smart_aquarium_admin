@@ -10,10 +10,12 @@ db=firestore.client()
 first_name = input("input first name\n")
 last_name = input("input last name\n")
 phone_number = input("input phone number\n")
+password = input("input password\n")
 
 db.collection('user').add({'first_name':first_name,
                            'last_name':last_name,
                            'phone_number':phone_number,
+                           'password':password,
                            'telegram_id':"null",
                            'bobber':0,
                            'feed':0,
