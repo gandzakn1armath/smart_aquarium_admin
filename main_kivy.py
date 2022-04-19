@@ -1,8 +1,17 @@
+import threading
+
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
 from kivy.core.window import Window
-# set window size
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+cred = credentials.Certificate("aquarium_key.json")
+firebase_admin.initialize_app(cred)
+
 Window.size = (300, 550)
 KV = '''
 Screen:
@@ -64,30 +73,53 @@ Screen:
 '''
 
 
-class LoginApp(MDApp):
+class RegistrationApp(MDApp):
     dialog = None
     def build(self):
         # define theme colors
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Indigo"
         self.theme_cls.accent_palette = "Blue"
-        # load and return kv string
-        return Builder.load_string(KV)
+        self.screen = Builder.load_string(KV)
+        return self.screen
+
+    def registration(self):
+        self.first_name = self.screen.ids.first_name
+        self.last_name = self.screen.ids.last_name
+        self.password = self.screen.ids.password
+        self.phone_number = self.screen.ids.phone_number
+
+        db = firestore.client()
+        db.collection('user').add({'first_name': self.first_name.text,
+                                   'last_name': self.last_name.text,
+                                   'phone_number': self.phone_number.text,
+                                   'password': self.password.text,
+                                   'telegram_id': "null",
+                                   'bobber': 0,
+                                   'feed': 0,
+                                   'filter': 0,
+                                   'heater': 0,
+                                   'led_white': 0,
+                                   'led_yellow': 0,
+                                   'water_acidity': 0,
+                                   'water_temperature': 0,
+                                   'temperature': 0,
+                                   'humidity': 0})
 
     def sign_up(self):
-        print("aso")
+        self.threadSignUp = threading.Thread(target=self.registration)
+        self.threadSignUp.start()
         if not self.dialog:
-            self.dialog = MDDialog(text="You are register succes")
-
-
+            self.dialog = MDDialog(text="You are register successful",
+                                   buttons=[MDFlatButton(text='CLOSE',on_release=self.close)])
         self.dialog.open()
 
-    def close(self, instance):
-        # close dialog
+
+    def close(self,instanse):
         self.dialog.dismiss()
+        self.first_name.text = ""
+        self.last_name.text = ""
+        self.password.text = ""
+        self.phone_number.text = ""
 
-
-
-
-    # run app
-LoginApp().run()
+RegistrationApp().run()
