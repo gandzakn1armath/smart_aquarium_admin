@@ -1,5 +1,4 @@
 import threading
-
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
