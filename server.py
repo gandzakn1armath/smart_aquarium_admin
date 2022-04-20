@@ -6,20 +6,48 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import threading
 
-
 cred = credentials.Certificate("aquarium_key.json")
 firebase_admin.initialize_app(cred)
 
-db=firestore.client()
+db = firestore.client()
 
 phone_number = ""
 password = ""
+users = None
+bot = telebot.TeleBot('5214025271:AAEMvGMgQhRuB19T9BSN5ViEnX1YjnB1Wxk')
 
-bot = telebot.TeleBot('5214025271:AAHXYu-8FBD9TAwDVgn2syC7xzveH8gqU-s')
+
+def get_user_data(id, key):
+    return db.collection('user').document(id).get().to_dict().get(key)
 
 
-@bot.message_handler(commands=["start","help"])
+def update_database():
+
+    while True:
+        list = db.collection('user').stream()
+        if list:
+            print("datark che")
+            global users
+            users = list
+            sleep(3600)
+        else:
+            print("datark e")
+            sleep(60)
+
+
+def get_user_id(telegram_id):
+    global users
+    for user in users:
+        if telegram_id == user.get("telegram_id"):
+            return user.id
+    return None
+
+
+@bot.message_handler(commands=["start"])
 def start(message, res=False):
+    global phone_number, password
+    phone_number = ""
+    password = ""
     bot.send_message(message.from_user.id, "Welcome to Armath Aquarium Bot")
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = types.KeyboardButton("Login")
@@ -28,14 +56,19 @@ def start(message, res=False):
                      reply_markup=markup)
 
 
-
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
     print(message)
+    text = message.text
     id = message.from_user.id
-    if message.text == "Login":
+    if text == "Login":
         bot.send_message(id, "Please write your number")
         bot.register_next_step_handler(message, reg_number)
+    elif text == "white led":
+        user_id = get_user_id(id)
+        if user_id:
+            white = get_user_data(user_id, "white_led")
+            db.collection('user').document(user_id).update({'white_led': not white})
 
 
 def reg_number(message):
@@ -45,12 +78,13 @@ def reg_number(message):
     bot.send_message(id, "Please write your password")
     bot.register_next_step_handler(message, reg_password)
 
+
 def reg_password(message):
     global password
     global phone_number
+    global users
     id = message.from_user.id
     password = message.text
-    users = db.collection('user').stream()
     is_check_number = False
     for user in users:
         user_phone_number = user.get("phone_number")
@@ -90,6 +124,7 @@ def reg_password(message):
         bot.register_next_step_handler(message, reg_number)
 
 
+threadUpdate = threading.Thread(target=update_database)
+threadUpdate.start()
 
 bot.infinity_polling()
-
