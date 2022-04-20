@@ -28,6 +28,3 @@ db.collection('user').add({'first_name':first_name,
                            'temperature':0,
                            'humidity':0 })
 print("Finish")
-
-
-
