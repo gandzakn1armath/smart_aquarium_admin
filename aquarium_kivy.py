@@ -58,29 +58,34 @@ Screen:
         padding: 65
         spacing: 35
         orientation: 'vertical'
-        MDFillRoundFlatButton:
-            text:"White Led"
-            background_color: 0,1,1,1
-            pos_hint: {"x":0, "y":0}
-        MDFillRoundFlatButton:
-            text:"Yellow Led"
-            background_color:  0,1,1,1
-            pos_hint: {"x":0.8 ,"y":0}
-        MDFillRoundFlatButton:
-            text:"Filter"
-            background_color: 0,1,1,1
-            pos_hint: {"center_x":.5, "center_y":.5}
-        MDFillRoundFlatButton:
-            text:"Heater"
-            background_color: 0,1,1,1
-            pos_hint: {"x":0, "top":1}
-        MDFillRoundFlatButton:
-            text:"Feed"
-            background_color:  0,1,1,1
-            pos_hint: {"x":1, "y":5}
+        Image:
+            source: "./res/icons/beaker_highres.png"
+        Image:
+            source: "./res/icons/jermachap.png"
+            size_hint_x:0.25
+        Image:
+            source: "./res/icons/jermachap.png"
+            size_hint_x:0.25
+        Image:
+            source: "./res/icons/lamp.jpg"
+            size_hint_x:1.75
+            pos_hint:{'center_x':0.75,'y':0.35}
+        Image:
+            source: "./res/icons/lamp.jpg"
+            size_hint_x:1.75
+        Image:
+            source: "./res/icons/feed.png"
+            pos_hint:{'center_x':0.95,'y':0.35}
+            pos_hint:{'center_y':0.5,'y':0.15}
+        Image:
+            source: "./res/icons/aquarium.png"
+            size_hint_x:1.75
+            
+            
 '''
 class AquariumApp(MDApp):
     def build(self):
+        self.theme_cls.theme_style = "Dark"
         self.screen = Builder.load_string(kv_aquarium)
         return self.screen
 
