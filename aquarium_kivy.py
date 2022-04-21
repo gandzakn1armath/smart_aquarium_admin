@@ -1,18 +1,13 @@
-from kivy.app import App
 from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
 from kivymd.app import MDApp
-from kivy.app import App
-from kivy.uix.button import Button
-from kivymd.uix.button import MDFlatButton
 from kivy.core.window import Window
 
-Window.size = (550,400)
+
 kv_login = '''
 Screen:
     MDCard:
         size_hint: None, None
-        size: 550, 400
+        size: 650,600
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
         elevation: 10
         padding: 65
@@ -52,36 +47,40 @@ kv_aquarium='''
 Screen:
     MDCard:
         size_hint: None, None
-        size: 550, 550
+        size: 650,650
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
         elevation: 10
         padding: 65
         spacing: 35
         orientation: 'vertical'
+        MDFillRoundFlatButton:
+            text:"White Led"
+            background_color: 0,1,1,1
+        MDFillRoundFlatButton:
+            text:"Yellow Led"
+            background_color:  0,1,1,1
+        MDFillRoundFlatButton:
+            text:"Filter"
+            background_color: 0,1,1,1
+        MDFillRoundFlatButton:
+            text:"Heater"
+            background_color: 0,1,1,1
+        MDFillRoundFlatButton:
+            text:"Feed"
+            background_color:  0,1,1,1 
+            
+    BoxLayout:
+        orientation:'vertical'
         Image:
             source: "./res/icons/beaker_highres.png"
         Image:
             source: "./res/icons/jermachap.png"
-            size_hint_x:0.25
         Image:
             source: "./res/icons/jermachap.png"
-            size_hint_x:0.25
-        Image:
-            source: "./res/icons/lamp.jpg"
-            size_hint_x:1.75
-            pos_hint:{'center_x':0.75,'y':0.35}
-        Image:
-            source: "./res/icons/lamp.jpg"
-            size_hint_x:1.75
-        Image:
-            source: "./res/icons/feed.png"
-            pos_hint:{'center_x':0.95,'y':0.35}
-            pos_hint:{'center_y':0.5,'y':0.15}
         Image:
             source: "./res/icons/aquarium.png"
-            size_hint_x:1.75
-            
-            
+        Image:
+            source: "./res/icons/humidity.png" 
 '''
 class AquariumApp(MDApp):
     def build(self):
