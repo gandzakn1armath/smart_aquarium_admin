@@ -93,7 +93,7 @@ class RegistrationApp(MDApp):
                                    'last_name': self.last_name.text,
                                    'phone_number': self.phone_number.text,
                                    'password': self.password.text,
-                                   'telegram_id': "null",
+                                   'telegram_id': [],
                                    'bobber': 0,
                                    'feed': 0,
                                    'filter': 0,

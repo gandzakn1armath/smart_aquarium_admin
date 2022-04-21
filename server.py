@@ -20,24 +20,16 @@ bot = telebot.TeleBot('5214025271:AAEMvGMgQhRuB19T9BSN5ViEnX1YjnB1Wxk')
 def get_user_data(id, key):
     return db.collection('user').document(id).get().to_dict().get(key)
 
-
-def update_database():
-    while True:
-        list = db.collection('user').stream()
-        if list:
-            print("datark che")
-            global users
-            users = list
-            sleep(3600)
-        else:
-            print("datark e")
-            sleep(60)
-
+def get_white_status(whiteLed):
+    if whiteLed == 0:
+        return "White led is off"
+    else:
+        return "White led is on"
 
 def get_user_id(telegram_id):
-    global users
+    users = db.collection('user').stream()
     for user in users:
-        if telegram_id == user.get("telegram_id"):
+        if telegram_id in user.get("telegram_id"):
             return user.id
     return None
 
@@ -64,10 +56,12 @@ def echo_all(message):
         bot.send_message(id, "Please write your number")
         bot.register_next_step_handler(message, reg_number)
     elif text == "white led":
+
         user_id = get_user_id(id)
         if user_id:
-            white = get_user_data(user_id, "white_led")
-            db.collection('user').document(user_id).update({'white_led': not white})
+            white = not get_user_data(user_id, "led_white")
+            db.collection('user').document(user_id).update({'led_white': white})
+            bot.send_message(id, get_white_status(white))
 
 
 def reg_number(message):
@@ -81,23 +75,25 @@ def reg_number(message):
 def reg_password(message):
     global password
     global phone_number
-    global users
     id = message.from_user.id
     password = message.text
     is_check_number = False
+    users = db.collection('user').stream()
     for user in users:
         user_phone_number = user.get("phone_number")
         user_password = user.get("password")
-        telegram_id = user.get("telegram_id")
+        telegram_ids = list(user.get("telegram_id"))
         if user_phone_number == phone_number and user_password == password:
             phone_number = ""
             password = ""
             is_check_number = True
-            if telegram_id == "null":
-                db.collection('user').document(user.id).update({'telegram_id': message.from_user.id})
-                bot.send_message(id, "Your registration successful")
-            else:
+            if message.from_user.id in telegram_ids :
                 bot.send_message(id, "Your login successful")
+            else:
+                telegram_ids.append(message.from_user.id)
+                db.collection('user').document(user.id).update({'telegram_id':telegram_ids})
+                bot.send_message(id, "Your registration successful")
+
         break
 
     if is_check_number:
@@ -122,8 +118,5 @@ def reg_password(message):
         bot.send_message(id, "incorrect phone number or password, please write again")
         bot.register_next_step_handler(message, reg_number)
 
-
-threadUpdate = threading.Thread(target=update_database)
-threadUpdate.start()
 
 bot.infinity_polling()
