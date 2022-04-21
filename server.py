@@ -22,7 +22,6 @@ def get_user_data(id, key):
 
 
 def update_database():
-
     while True:
         list = db.collection('user').stream()
         if list:
