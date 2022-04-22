@@ -6,10 +6,13 @@ from kivymd.uix.button import MDFlatButton
 from kivy.core.window import Window
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import firestore
+from firebase_admin import db
+cred = credentials.Certificate("smart-aquarium.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
+})
 
-cred = credentials.Certificate("aquarium_key.json")
-firebase_admin.initialize_app(cred)
+ref = db.reference('/')
 
 Window.size = (300, 550)
 KV = '''
@@ -88,22 +91,21 @@ class RegistrationApp(MDApp):
         self.password = self.screen.ids.password
         self.phone_number = self.screen.ids.phone_number
 
-        db = firestore.client()
-        db.collection('user').add({'first_name': self.first_name.text,
-                                   'last_name': self.last_name.text,
-                                   'phone_number': self.phone_number.text,
-                                   'password': self.password.text,
-                                   'telegram_id': [],
-                                   'bobber': 0,
-                                   'feed': 0,
-                                   'filter': 0,
-                                   'heater': 0,
-                                   'led_white': 0,
-                                   'led_yellow': 0,
-                                   'water_acidity': 0,
-                                   'water_temperature': 0,
-                                   'temperature': 0,
-                                   'humidity': 0})
+        ref.push({"first_name": self.first_name.text,
+                                   "last_name": self.last_name.text,
+                                   "phone_number": self.phone_number.text,
+                                   "password": self.password.text,
+                                   "telegram_id": [""],
+                                   "bobber": 0,
+                                   "feed": 0,
+                                   "filter": 0,
+                                   "heater": 0,
+                                   "led_white": 0,
+                                   "led_yellow": 0,
+                                   "water_acidity": 0,
+                                   "water_temperature": 0,
+                                   "temperature": 0,
+                                   "humidity": 0})
 
     def sign_up(self):
         self.threadSignUp = threading.Thread(target=self.registration)

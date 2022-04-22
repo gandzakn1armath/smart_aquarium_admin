@@ -1,30 +1,21 @@
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import firestore
+from firebase_admin import db
+import json
 
-cred = credentials.Certificate("aquarium_key.json")
-firebase_admin.initialize_app(cred)
+cred = credentials.Certificate("smart-aquarium.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
+})
 
-db=firestore.client()
+ref = db.reference('/')
+ref.child("-N0E8J3ItyjCsWAJ-0l4").update({"first_name":"Torg"})
+users = ref.get()
 
-first_name = input("input first name\n")
-last_name = input("input last name\n")
-phone_number = input("input phone number\n")
-password = input("input password\n")
+for key, value in users.items():
+    user = ref.child(key)
+    json_object = json.loads(json.dumps(user.get()))
+    print(key)
+    print(type(json_object))
+    print(json_object["first_name"])
 
-db.collection('user').add({'first_name':first_name,
-                           'last_name':last_name,
-                           'phone_number':phone_number,
-                           'password':password,
-                           'telegram_id':"null",
-                           'bobber':0,
-                           'feed':0,
-                           'filter':0,
-                           'heater':0,
-                           'led_white':0,
-                           'led_yellow':0,
-                           'water_acidity':0,
-                           'water_temperature':0,
-                           'temperature':0,
-                           'humidity':0 })
-print("Finish")
