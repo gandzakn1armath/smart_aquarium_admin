@@ -47,6 +47,16 @@ class Ui_MainWindow(object):
     def get_feed(self):
         return self.get_user_data("feed")
 
+    def get_water_acidity_status(self):
+        ref = db.reference('/')
+        user = ref.child(USER_ID)
+        user_data = json.loads(json.dumps(user.get()))
+        water_acidity = user_data["water_acidity"]
+        if water_acidity >= 7:
+            return "Water is not clean"
+        else:
+            return "Water is clean"
+
     def initData(self):
         while True:
             ref = db.reference('/')
@@ -55,11 +65,11 @@ class Ui_MainWindow(object):
             humidity = user_data["humidity"]
             water_temp = user_data["water_temperature"]
             temp = user_data["temperature"]
-            water_acidity = user_data["water_acidity"]
+
             self.temperatura.setText(self._translate("MainWindow", "     " + str(temp) + " C"))
             self.humidity.setText(self._translate("MainWindow", "     " + str(humidity) + " %"))
             self.waterTemp.setText(self._translate("MainWindow", "     " + str(water_temp) + " C"))
-            self.acidity.setText(self._translate("MainWindow", "     " + str(water_acidity)))
+            self.acidity.setText(self._translate("MainWindow", "     " + self.get_water_acidity_status()))
 
     def filterData(self):
         while True:
