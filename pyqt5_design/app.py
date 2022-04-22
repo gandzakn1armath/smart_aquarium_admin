@@ -47,9 +47,9 @@ class Ui_MainWindow(object):
         user_data = json.loads(json.dumps(user.get()))
         water_acidity = user_data["water_acidity"]
         if water_acidity >= 7:
-            return "Water is not clean"
+            return "Is not clean"
         else:
-            return "Water is clean"
+            return "Is clean"
 
     def initData(self):
         while True:

@@ -12,19 +12,10 @@ firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
 })
 
-
-
 phone_number = ""
 password = ""
 users = None
 bot = telebot.TeleBot('5214025271:AAEMvGMgQhRuB19T9BSN5ViEnX1YjnB1Wxk')
-
-
-def get_user_data(id, key):
-    ref = db.reference('/')
-    user = ref.child(id)
-    json_object = json.loads(json.dumps(user.get()))
-    return json_object[key]
 
 
 def get_white_status(white_led):
@@ -69,6 +60,46 @@ def get_bobber_status(bobber):
         return "Water is scarce"
 
 
+def cron():
+    while True:
+        try:
+            sleep(10)
+            ref = db.reference('/')
+            users = ref.get()
+            for key, value in users.items():
+                user = ref.child(key)
+                json_object = json.loads(json.dumps(user.get()))
+                if not json_object["enabled_test"]:
+                    update_user_data(key, "enabled_test", True)
+                    sleep(5)
+                    user = ref.child(key)
+                    json_object = json.loads(json.dumps(user.get()))
+                    if json_object["enabled_test"]:
+                        telegram_ids = json_object["telegram_id"]
+                        if telegram_ids:
+                            for id in telegram_ids:
+                                if id:
+                                    bot.send_message(id, "There is no connection to your aquarium, please check it")
+                                    sleep(1)
+                else:
+                    telegram_ids = json_object["telegram_id"]
+                    if telegram_ids:
+                        for id in telegram_ids:
+                            if id:
+                                bot.send_message(id, "There is no connection to your aquarium, please check it")
+                                sleep(1)
+        except Exception:
+            pass
+
+
+
+def get_user_data(id, key):
+    ref = db.reference('/')
+    user = ref.child(id)
+    json_object = json.loads(json.dumps(user.get()))
+    return json_object[key]
+
+
 def get_user_id(telegram_id):
     ref = db.reference('/')
     users = ref.get()
@@ -84,6 +115,7 @@ def get_user_id(telegram_id):
 def update_user_data(id, key, value):
     ref = db.reference('/')
     ref.child(id).update({key: value})
+
 
 def login(user_id):
     global phone_number, password
@@ -179,6 +211,7 @@ def echo_all(call):
                 show_keyboard(id, "The fish are fed")
             elif text == "status":
                 show_keyboard(id, get_user_sensors_data(user_id))
+
             elif text == "sensors":
                 show_keyboard(id, sensors_data(user_id))
         else:
@@ -242,5 +275,7 @@ def reg_password(message):
         bot.register_next_step_handler(message, reg_number)
         login(message.from_user.id)
 
+
 print("Start")
 bot.polling(none_stop=True, interval=0)
+
