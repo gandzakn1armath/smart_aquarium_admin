@@ -147,7 +147,7 @@ def echo_all(call):
     text = call.data
     id = call.from_user.id
     if text == "Login":
-        bot.send_message(id, "Please write your number")
+        bot.send_message(id, "Please write your phone number")
         bot.register_next_step_handler(message, reg_number)
     elif text == "log out":
         user_id = get_user_id(id)
