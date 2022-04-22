@@ -47,7 +47,7 @@ filterEnabled = False
 isFeedFish = False
 servo = None
 
-cred = credentials.Certificate("/home/pi/Desktop/smart-aquarium.json")
+cred = credentials.Certificate("/home/pi/Desktop/smart_aquarium.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
 })
@@ -200,17 +200,16 @@ def white():
     global ledsEnabled
     while True:
         try:
-
             whiteLed = get_led_white()
             hour = strftime("%H")
             minute = strftime("%M")
             second = strftime("%S")
 
             if hour == "18" and minute == "00" and second == "00":
-                db.collection('user').document(USER_ID).update({'led_white': 1})
+                update_user_data({'led_white': True})
 
             if hour == "23" and minute == "59" and second == "59":
-                db.collection('user').document(USER_ID).update({'led_white': 0})
+                update_user_data({'led_white': False})
 
             if whiteLed == 1:
                 whiteOn()
@@ -231,7 +230,7 @@ def sensors():
         try:
             if ser.in_waiting > 0:
                 waterAcidity = float(ser.readline().decode('utf-8').rstrip())
-                update_user_data("water_acidity", waterAcidity)
+                update_user_data({'water_acidity': waterAcidity})
 
             sleep(10)
         except Exception:
@@ -248,13 +247,13 @@ def other_sensors():
                               'temperature': float(temperature),
                               'bobber': bobber.is_pressed})
             waterTemp = read_temp()
-            update_user_data("water_temperature", float(waterTemp))
+            update_user_data({'water_temperature': float(waterTemp)})
             sleep(10)
         except Exception:
             pass
 
 
-def servo():
+def servo_motor():
     global servo
     servo = AngularServo(21, min_pulse_width=0.0001, max_pulse_width=0.0026)
     servo.angle = 90
@@ -264,7 +263,7 @@ def servo():
             feed = get_feed()
             if feed == 1:
                 feedFish()
-                update_user_data("feed",0)
+                update_user_data({'feed': 0})
         except Exception:
             ledR.on()
             sleep(1)
@@ -298,7 +297,7 @@ def heater():
 
 threadWhite = threading.Thread(target=white)
 threadYellow = threading.Thread(target=yellow)
-threadServo = threading.Thread(target=servo)
+threadServo = threading.Thread(target=servo_motor)
 threadFilter = threading.Thread(target=filterWater)
 threadSensors = threading.Thread(target=sensors)
 threadOtherSensors = threading.Thread(target=other_sensors)
@@ -309,6 +308,7 @@ threadServo.start()
 threadFilter.start()
 threadSensors.start()
 threadOtherSensors.start()
+print("Start")
 
 while True:
     try:
