@@ -27,14 +27,14 @@ Screen:
         orientation: 'vertical'
         MDIcon:
             icon: 'account'
-            icon_color: 0, 0, 0, 0
+            icon_color: 1, 1, 1, 1
             halign: 'center'
             font_size: 150
         MDTextFieldRound:
             id: first_name
             icon_left: "account-check"
             hint_text: "First Name"
-            foreground_color: 1, 0, 1, 1
+            foreground_color: 1, 1, 1, 1
             size_hint_x: None
             width: 220
             font_size: 20
@@ -43,7 +43,7 @@ Screen:
             id: last_name
             icon_left: "account-check"
             hint_text: "Last Name"
-            foreground_color: 1, 0, 1, 1
+            foreground_color: 1, 1, 1, 1
             size_hint_x: None
             width: 220
             font_size: 20            
@@ -52,7 +52,7 @@ Screen:
             id: phone_number
             icon_left: "phone"
             hint_text: "Phone Number"
-            foreground_color: 1, 0, 1, 1
+            foreground_color: 1, 1, 1, 1
             size_hint_x: None
             width: 220
             font_size: 20            
@@ -61,7 +61,7 @@ Screen:
             id: password
             icon_left: "eye-off"
             hint_text: "Password"
-            foreground_color: 1, 0, 1, 1
+            foreground_color: 1, 1, 1, 1
             size_hint_x: None
             width: 220
             font_size: 20            

@@ -11,7 +11,7 @@ import glob
 import serial
 import json
 
-USER_ID = "A85ax6ajwcNiG53Papd8"
+USER_ID = "-N0E8J3ItyjCsWAJ-0l4"
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -47,23 +47,24 @@ filterEnabled = False
 isFeedFish = False
 servo = None
 
-cred = credentials.Certificate("/home/pi/Desktop/aquarium_key.json")
+cred = credentials.Certificate("/home/pi/Desktop/smart-aquarium.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
 })
 
-ref = db.reference('/')
-
 
 def update_user_data(key, value):
+    ref = db.reference('/')
     ref.child(USER_ID).update({key: value})
 
 
 def update_user_data(value):
+    ref = db.reference('/')
     ref.child(USER_ID).update(value)
 
 
 def get_user_data(key):
+    ref = db.reference('/')
     user = ref.child(USER_ID)
     json_object = json.loads(json.dumps(user.get()))
     return json_object[key]

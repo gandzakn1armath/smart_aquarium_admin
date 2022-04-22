@@ -12,7 +12,7 @@ firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
 })
 
-ref = db.reference('/')
+
 
 phone_number = ""
 password = ""
@@ -21,6 +21,7 @@ bot = telebot.TeleBot('5214025271:AAEMvGMgQhRuB19T9BSN5ViEnX1YjnB1Wxk')
 
 
 def get_user_data(id, key):
+    ref = db.reference('/')
     user = ref.child(id)
     json_object = json.loads(json.dumps(user.get()))
     return json_object[key]
@@ -69,6 +70,7 @@ def get_bobber_status(bobber):
 
 
 def get_user_id(telegram_id):
+    ref = db.reference('/')
     users = ref.get()
     for key, value in users.items():
         user = ref.child(key)
@@ -80,6 +82,7 @@ def get_user_id(telegram_id):
 
 
 def update_user_data(id, key, value):
+    ref = db.reference('/')
     ref.child(id).update({key: value})
 
 def login(user_id):
@@ -93,6 +96,7 @@ def login(user_id):
 
 
 def sensors_data(user_id):
+    ref = db.reference('/')
     user = ref.child(user_id)
     user_data = json.loads(json.dumps(user.get()))
     humidity = user_data["humidity"]
@@ -107,6 +111,7 @@ def sensors_data(user_id):
     return sensor_data
 
 def get_user_sensors_data(user_id):
+    ref = db.reference('/')
     user = ref.child(user_id)
     user_data = json.loads(json.dumps(user.get()))
     led_white = user_data["led_white"]
@@ -208,6 +213,7 @@ def reg_password(message):
     id = message.from_user.id
     password = message.text
     is_check_number = False
+    ref = db.reference('/')
     users = ref.get()
     for key, value in users.items():
         data = ref.child(key)
@@ -216,8 +222,6 @@ def reg_password(message):
         user_password = user["password"]
 
         if user_phone_number == phone_number and user_password == password:
-            phone_number = ""
-            password = ""
             is_check_number = True
             telegram_ids = list(user["telegram_id"])
             if message.from_user.id in telegram_ids:
@@ -227,13 +231,16 @@ def reg_password(message):
                 ref.child(key).update({'telegram_id': telegram_ids})
                 bot.send_message(id, "Your login successful")
 
-        break
+            break
 
     if is_check_number:
+        phone_number = ""
+        password = ""
         show_keyboard(message.from_user.id, "Please check")
     else:
         bot.send_message(id, "incorrect phone number or password, please write again")
         bot.register_next_step_handler(message, reg_number)
+        login(message.from_user.id)
 
 print("Start")
 bot.polling(none_stop=True, interval=0)
