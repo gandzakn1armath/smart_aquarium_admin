@@ -6,12 +6,6 @@ import json
 import threading
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-config = {
-    "apiKey": "AIzaSyDmLjTHyFMMLg7RyIWpHCtrabgPe15Eyh8",
-    "authDomain": "smart-aquarium-804ab.firebaseapp.com",
-    "databaseURL": "https://smart-aquarium-804ab-default-rtdb.firebaseio.com",
-    "storageBucket": "smart-aquarium-804ab.appspot.com"
-}
 cred = credentials.Certificate("smart-aquarium.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
