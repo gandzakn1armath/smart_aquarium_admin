@@ -22,10 +22,6 @@ USER_ID = "-N0E8J3ItyjCsWAJ-0l4"
 
 class Ui_MainWindow(object):
 
-    def update_user_data(self, key, value):
-        ref = db.reference('/')
-        ref.child(USER_ID).update({key: value})
-
     def update_user_data(self, value):
         ref = db.reference('/')
         ref.child(USER_ID).update(value)
@@ -121,23 +117,23 @@ class Ui_MainWindow(object):
         feedDataThread.start()
 
     def clickedFilterButton(self):
-        self.update_user_data("filter", not self.get_filter())
+        self.update_user_data({"filter": not self.get_filter()})
         print("Clicked filter")
 
     def clickedHeaterButton(self):
-        self.update_user_data("heater", not self.get_heater())
+        self.update_user_data({"heater": not self.get_heater()})
         print("Clicked heater")
 
     def clickedwhiteLedButton(self):
-        self.update_user_data("led_white", not self.get_led_white())
+        self.update_user_data({"led_white": not self.get_led_white()})
         print("Clicked white led")
 
     def clickedYellowLedButton(self):
-        self.update_user_data("led_yellow", not self.get_led_yellow())
+        self.update_user_data({"led_yellow": not self.get_led_yellow()})
         print("Clicked yellow led")
 
     def clickedFeedButton(self):
-        self.update_user_data("feed", 1)
+        self.update_user_data({"feed": 1})
         print("Clicked feed")
 
     def setupUi(self, MainWindow):
