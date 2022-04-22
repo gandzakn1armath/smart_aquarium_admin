@@ -12,7 +12,7 @@ config = {
     "databaseURL": "https://smart-aquarium-804ab-default-rtdb.firebaseio.com",
     "storageBucket": "smart-aquarium-804ab.appspot.com"
 }
-cred = credentials.Certificate("smart-aquarium.json")
+cred = credentials.Certificate("aquarium_key.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
 })

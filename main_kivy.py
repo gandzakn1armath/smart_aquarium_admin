@@ -6,13 +6,12 @@ from kivymd.uix.button import MDFlatButton
 from kivy.core.window import Window
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import db
-cred = credentials.Certificate("smart-aquarium.json")
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
-})
+from firebase_admin import firestore
 
-ref = db.reference('/')
+cred = credentials.Certificate("aquarium_key.json")
+firebase_admin.initialize_app(cred)
+
+
 
 Window.size = (300, 550)
 KV = '''
@@ -90,8 +89,8 @@ class RegistrationApp(MDApp):
         self.last_name = self.screen.ids.last_name
         self.password = self.screen.ids.password
         self.phone_number = self.screen.ids.phone_number
-
-        ref.push({"first_name": self.first_name.text,
+        db = firestore.client()
+        db.collection('user').add({"first_name": self.first_name.text,
                                    "last_name": self.last_name.text,
                                    "phone_number": self.phone_number.text,
                                    "password": self.password.text,

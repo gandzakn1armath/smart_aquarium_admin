@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "smart-aquarium-8e3e3",
+  "private_key_id": "e56de7a662402860de11f9a8f7d63fe946348895",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDAzd29MLGXWR9A\njymJPzfmfOyesToNVlQm3zzNvLC4pqJPRTvK7ucjB5k7b2E9hBER204aSf+O6x+d\n6O1C2b4mGc1MQgcqFIJ+TDXID6zbwWXnFar5clUGMh2HtJaeAl7GqE4T8WvKpZdj\nybN+1w076sez7FbtsZpII35bVQIEzJmk7Oq15JgpDjS6HNgcB+ZVmOGZCH/L/KrE\n6xMIez0jckkkP3YhYavPk35gFGjqNaJno19olgvlfFfrN/+yWiY8kfPdbbYQPs8F\npcm0bjjTJDqRJZ6KOZOO0FkZWG1ZWc8aH+n3c7n5lEusutXGWN+ghLggSu6DhTrt\niXamK4+TAgMBAAECggEAHJhr4rtuG3xkXjbdejWeHNk6Xu76JTBAmuNRKVJrA3fz\nar5h998m+NMPrvj9+xmzTmqwUsXW2WOV9N2vEtMomI4LHNxOI7eXAxRahamNgapV\nasiT6xtB8QFNz+rAy/6d/+jGa77KteuJYItxy8YpeFGB/PV4jxhgQYLCItmgywUr\nZk0p3VZ82kpErw34vltEV3z+p3I3WpijN0aShjc1Ifyqtg31MZ3KckwYRahwuFHi\nn/S1banjmxDyqhMRrwSpl5s7pFjtQisohuWyvdLCsrATabGdkpj0qH17p5z8mhkC\npTiSWtM2kaGeoToPlAtw/z9EI5bUnwELN2skC7HfwQKBgQDqMb9PYYiV5YjJVBay\nrOvEb1Hs6mxFaSeDIETNM3QxuJpPDnbj0iTVtgOOPedtd9hEhe4TPx3nX0V9VaP0\nsKVmOCEYLCppQy6PHnn8DhJYRJ7fArHUNPDYoCb7MJPEYDh47kmA0ZSZ4gf2m4xL\nz/g58F6IUFMCYIHC9ZUcHBsUbwKBgQDSwYsnKw2SJq2wrxEboLq32FX24f9/yklO\n1ef2sZWZm622luy57qibheZ3xyJ9bakkGfuHhEx+krx/RZJ4GBVx8jGQD/UWkdiN\nzsbVxj2Fz/m2viYPwMeXSTS9pLIB6ZnxSu+0sxq3dRgE7SJMEQ6NYwa0DnfPv9Xm\nJvvY/V8xHQKBgQCUne8uu9FGdnwAbzlcN7oCVTZjJzyAK8PkRXUD11Q0PVbHNoGh\n/3hamn/VI1masUPv8CHt2s7qRh499DvwiqzbmmD+CwD6/aQtNITqvC9ODnXXRcl9\nxf7VKYSzQNd09i7AJ09DzTwFD1hIWduFPLvkYLJMxNR4nK+b/eabCQbyRwKBgGMP\nfayHW/WaIIGvh8cIoTrQgHduen1CQ3q+qC0YA00UE26DOfma571SDqW1/8wcwyeo\n3sUvthS4O8lGljXEfC/2ur0QAw78tmDRFDxe1YQT4Te34IP/BNFjI1sQEms7tZPo\nuQqiNKiObR/Dph9C1Sg3p2rycfZAIPXw1OeFED0xAoGASJZRMdqp9ODvx37L0Z5Q\noelqeMrxQK1gmZK+3PQSLgFOjMbHDVz8mHJ0a615b5ZRl1BvOULkMqYPRC4j8DGi\n45lcOZbQTnx8SLChtGNzYs9Utxm+0XURxcv2OIMuW2d528UeMTtgWOcWrZhkF/j7\nXifzfk4zS5GAvzR8lD1q1YM=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-hat4s@smart-aquarium-8e3e3.iam.gserviceaccount.com",
+  "client_id": "100423106920763466848",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-hat4s%40smart-aquarium-8e3e3.iam.gserviceaccount.com"
+}

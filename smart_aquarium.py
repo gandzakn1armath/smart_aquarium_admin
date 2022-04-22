@@ -47,7 +47,7 @@ filterEnabled = False
 isFeedFish = False
 servo = None
 
-cred = credentials.Certificate("/home/pi/Desktop/smart_aquarium.json")
+cred = credentials.Certificate("/home/pi/Desktop/aquarium_key.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
 })

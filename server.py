@@ -3,14 +3,12 @@ import telebot
 from telebot import types
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import db
+from firebase_admin import firestore
 import threading
-import json
 
-cred = credentials.Certificate("smart-aquarium.json")
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://smart-aquarium-e9439-default-rtdb.firebaseio.com/'
-})
+cred = credentials.Certificate("aquarium_key.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 
 
@@ -21,10 +19,7 @@ bot = telebot.TeleBot('5214025271:AAEMvGMgQhRuB19T9BSN5ViEnX1YjnB1Wxk')
 
 
 def get_user_data(id, key):
-    ref = db.reference('/')
-    user = ref.child(id)
-    json_object = json.loads(json.dumps(user.get()))
-    return json_object[key]
+    return db.collection('user').document(id).get().to_dict().get(key)
 
 
 def get_white_status(white_led):
@@ -70,20 +65,15 @@ def get_bobber_status(bobber):
 
 
 def get_user_id(telegram_id):
-    ref = db.reference('/')
-    users = ref.get()
-    for key, value in users.items():
-        user = ref.child(key)
-        json_object = json.loads(json.dumps(user.get()))
-        if telegram_id in json_object["telegram_id"]:
-            return key
-
+    users = db.collection('user').stream()
+    for user in users:
+        if telegram_id in user.get("telegram_id"):
+            return user.id
     return None
 
 
 def update_user_data(id, key, value):
-    ref = db.reference('/')
-    ref.child(id).update({key: value})
+    db.collection('user').document(id).update({key: value})
 
 def login(user_id):
     global phone_number, password
@@ -96,13 +86,11 @@ def login(user_id):
 
 
 def sensors_data(user_id):
-    ref = db.reference('/')
-    user = ref.child(user_id)
-    user_data = json.loads(json.dumps(user.get()))
-    humidity = user_data["humidity"]
-    water_temp = user_data["water_temperature"]
-    temp = user_data["temperature"]
-    water_acidity = user_data["water_acidity"]
+    user_data = db.collection('user').document(user_id).get().to_dict()
+    humidity = user_data.get("humidity")
+    water_temp = user_data.get("water_temperature")
+    temp = user_data.get("temperature")
+    water_acidity = user_data.get("water_acidity")
     sensor_data = "Humidity " + str(humidity) + " %" + "\n" + \
                   "Water temperature " + str(water_temp) + " °C" + "\n" + \
                   "Air temperature " + str(temp) + "°C" + "\n" + \
@@ -111,18 +99,16 @@ def sensors_data(user_id):
     return sensor_data
 
 def get_user_sensors_data(user_id):
-    ref = db.reference('/')
-    user = ref.child(user_id)
-    user_data = json.loads(json.dumps(user.get()))
-    led_white = user_data["led_white"]
-    led_yellow = user_data["led_yellow"]
-    heater = user_data["heater"]
-    filter = user_data["filter"]
-    humidity = user_data["humidity"]
-    water_temp = user_data["water_temperature"]
-    temp = user_data["temperature"]
-    water_acidity = user_data["water_acidity"]
-    bobber = user_data["bobber"]
+    user_data = db.collection('user').document(user_id).get().to_dict()
+    led_white = user_data.get("led_white")
+    led_yellow = user_data.get("led_yellow")
+    heater = user_data.get("heater")
+    filter = user_data.get("filter")
+    humidity = user_data.get("humidity")
+    water_temp = user_data.get("water_temperature")
+    temp = user_data.get("temperature")
+    water_acidity = user_data.get("water_acidity")
+    bobber = user_data.get("bobber")
     sensors_data = get_white_status(led_white) + "\n" \
                    + get_yellow_status(led_yellow) + "\n" + \
                    get_heater_status(heater) + "\n" + \
@@ -213,22 +199,20 @@ def reg_password(message):
     id = message.from_user.id
     password = message.text
     is_check_number = False
-    ref = db.reference('/')
-    users = ref.get()
-    for key, value in users.items():
-        data = ref.child(key)
-        user = json.loads(json.dumps(data.get()))
-        user_phone_number = user["phone_number"]
-        user_password = user["password"]
+    users = db.collection('user').stream()
+
+    for user in users:
+        user_phone_number = user.get("phone_number")
+        user_password = user.get("password")
 
         if user_phone_number == phone_number and user_password == password:
             is_check_number = True
-            telegram_ids = list(user["telegram_id"])
+            telegram_ids = list(user.get("telegram_id"))
             if message.from_user.id in telegram_ids:
                 bot.send_message(id, "Your login successful")
             else:
                 telegram_ids.append(message.from_user.id)
-                ref.child(key).update({'telegram_id': telegram_ids})
+                update_user_data(user.id, 'telegram_id', telegram_ids)
                 bot.send_message(id, "Your login successful")
 
             break
@@ -242,5 +226,5 @@ def reg_password(message):
         bot.register_next_step_handler(message, reg_number)
         login(message.from_user.id)
 
-print("Start")
+print("Start script")
 bot.polling(none_stop=True, interval=0)
